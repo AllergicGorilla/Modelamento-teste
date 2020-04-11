@@ -5,110 +5,149 @@ const CWIDTH = 600;
 let cellWidth = CWIDTH / cols;
 let cellHeight = CHEIGHT / rows;
 //Simulation variables
-let oldCells = []
-let newCells = []
-let transmission = 0.1;
-let lethality = 0.05;
-let recoveryTime = 10;
-let recoveryRate = 0.5;
-let currTime = 0;
-let fps = 3;
+let matrix;
+let fps = 2;
 
-
+let ctx1 = document.getElementById('chart1').getContext('2d');
+let chart1 = new Chart(ctx1, {
+    type: 'line',
+    data: {
+        labels: [],
+        datasets: [{
+            label: '# Vulneráveis',
+            data: [],
+            fill: false,
+            backgroundColor:
+                'rgba(23, 155, 88, 0.2)',
+            borderColor:
+                'rgba(23, 155, 88, 1)',
+            borderWidth: 1
+        },
+        {
+            label: '# Infectados',
+            data: [],
+            fill: false,
+            backgroundColor:
+                'rgba(255, 99, 132, 0.2)',
+            borderColor:
+                'rgba(255, 99, 132, 1)',
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            xAxes: [{
+              gridLines: {
+                  display:false
+              }
+            }],
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                }
+            }]
+        },
+        elements: {
+            point:{
+              radius: 0
+          }
+        },
+        responsive: false
+    }
+});
+let ctx2 = document.getElementById('chart2').getContext('2d');
+let chart2 = new Chart(ctx2, {
+    type: 'line',
+    data: {
+        labels: [],
+        datasets: [{
+            label: '# Vulneráveis',
+            data: [],
+            backgroundColor:
+                'rgba(23, 155, 88, 1)',
+            borderColor:
+                'rgba(23, 155, 88, 1)',
+            borderWidth: 1
+        },
+        {
+            label: '# Infectados',
+            data: [],
+            backgroundColor:
+                'rgba(255, 99, 132, 1)',
+            borderColor:
+                'rgba(255, 99, 132, 1)',
+            borderWidth: 1
+        },
+        {
+            label: '# Mortos',
+            data: [],
+            backgroundColor:
+                'rgba(100, 100, 100, 1)',
+            borderColor:
+                'rgba(100, 100, 100, 1)',
+            borderWidth: 1
+        },
+        {
+            label: '# Recuperados',
+            data: [],
+            backgroundColor:
+                'rgba(255, 204, 0, 1)',
+            borderColor:
+                'rgba(255, 204, 0, 1)',
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            xAxes: [{
+              gridLines: {
+                  display:false
+              }
+            }],
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                },
+                stacked: true
+            }]
+        },
+        elements: {
+            point:{
+              radius: 0
+          }
+        },
+        responsive: false
+    }
+});
 function setup() {
   createCanvas(CWIDTH, CHEIGHT);
-  for (let i = 0; i < rows; i++){
-    oldCells[i] = [];
-    newCells[i] = [];
-    for (let j = 0; j < cols; j++){
-      let c = new Cell(i, j, true, false, false);
-      oldCells[i][j] = c;
-      newCells[i][j] = c;
-    }
-  }
-  oldCells[11][11].infected = true;
+  matrix = new CellMatrix(rows, cols);
   frameRate(fps);
 }
 
 function draw() {
   background(64);
-  //Update cells
-  for (let i = 0; i < rows; i++){
-    for (let j = 0; j < cols; j++){
-      let cell = oldCells[i][j];
-      if(cell.alive && !cell.recovered) {
-        if(!cell.infected) {
-          let neighbors = getNeighbors(cell);
-          for (let neighbor of neighbors) {
-            if (neighbor.infected && random(1) < transmission){
-              cell.infected = true;
-              cell.infectionTime = currTime;
-            }
-          }
-        }
-        else if (random(1) < recoveryRate && (currTime - cell.infectionTime) >= recoveryTime) {
-          cell.recovered = true;
-          cell.infected = false;
-        }
-        else if (random(1) < lethality) {
-          cell.recovered = false;
-          cell.infected = false;
-          cell.alive = false;
-        }
-      }
 
-    }
-  }
+  matrix.stepForward();
+  matrix.display();
+  const susceptible = matrix.countCells(x => x.alive && !x.infected && !x.recovered)
+  const infected = matrix.countCells(x => x.alive && x.infected && !x.recovered)
+  const dead = matrix.countCells(x => !x.alive)
+  const recovered = matrix.countCells(x => x.alive && !x.infected && x.recovered)
+  chart1.data.labels.push("")
+  chart1.data.datasets[0].data.push(susceptible)
+  chart1.data.datasets[1].data.push(infected)
+  // C2
+  chart2.data.labels.push("")
+  chart2.data.datasets[0].data.push(susceptible)
+  chart2.data.datasets[1].data.push(infected)
+  chart2.data.datasets[2].data.push(dead)
+  chart2.data.datasets[3].data.push(recovered)
+  chart1.update()
+  chart2.update()
+  document.getElementById('susceptible').textContent = susceptible
+  document.getElementById('infected').textContent = infected
+  document.getElementById('dead').textContent = dead
+  document.getElementById('recovered').textContent = recovered
 
-  //Display
-  for (let i = 0; i < rows; i++){
-    for (let j = 0; j < cols; j++){
-      newCells[i][j].display();
-    }
-  }
-  //Swap arrays
-  newCells = copyArray(oldCells);
-  //
-  currTime++;
-}
-
-function getNeighbors(cell) {
-  let testVicinity = [];
-  let neighbors = [];
-  //i = m - 1; j = n - 1;
-  for (let m = 0; m < 3; m++){
-    testVicinity[m] = [];
-    for (let n = 0; n < 3; n++){
-      testVicinity[m][n] = true;
-    }
-  }
-  if (cell.i == 0) {
-    testVicinity[0][0] = false;
-    testVicinity[0][1] = false;
-    testVicinity[0][2] = false;
-  }
-  else if (cell.i == rows-1) {
-    testVicinity[2][0] = false;
-    testVicinity[2][1] = false;
-    testVicinity[2][2] = false;
-  }
-  if (cell.j == 0) {
-    testVicinity[0][0] = false;
-    testVicinity[1][0] = false;
-    testVicinity[2][0] = false;
-  }
-  else if (cell.j == cols-1) {
-    testVicinity[0][2] = false;
-    testVicinity[1][2] = false;
-    testVicinity[2][2] = false;
-  }
-  testVicinity[1][1] = false;
-  for (let m = 0; m < 3; m++){
-    for (let n = 0; n < 3; n++){
-      if (testVicinity[m][n]) {
-        neighbors.push(oldCells[cell.i+m-1][cell.j+n-1]);
-      }
-    }
-  }
-  return neighbors;
 }
