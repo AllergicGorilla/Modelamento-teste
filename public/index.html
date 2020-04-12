@@ -14,21 +14,17 @@
       Pessoas mortas💀: <span id="dead"></span> <br />
       Pessoas recuperadas🙏: <span id="recovered"></span> <br />
     </p>
-    <canvas id="chart1"></canvas>
+    <!--<canvas id="chart1"></canvas>
     <canvas id="chart2"></canvas>
-    <!--<script src="cell.js"></script>
+    <script src="cell.js"></script>
     <script src="helpers.js"></script>
     <script src="plotCellData.js"></script>
     <script src="sketch.js"></script>-->
-    <script>
-      fetch('/coronasim')
-      .then(response => {
-        return response.json();
-      })
-      .then((response) => {
-        console.log(response);
-      });
-    </script>
+    <canvas id="coronasim" width="800" height="600"></canvas>
+    <style type="text/css">
+      canvas { border: 1px solid black; }
+    </style>
+    <script src="coronasim.js"></script>
 
   </body>
 </html>
