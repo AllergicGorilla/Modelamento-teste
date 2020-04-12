@@ -5,6 +5,10 @@ function randBool() {
   else
     return false;
 }
+function randInt(a, b) {
+  // Returns a random int n such that a <= n < b
+  return floor(random(a, b));
+}
 
 function copyArray(currentArray) {
   const len = currentArray.length;
