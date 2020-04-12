@@ -3,8 +3,8 @@
   <head>
     <title>Simulite-19🦠</title>
     <meta charset="UTF-8">
-    <script src="jsLibs/p5.min.js"></script>
-    <script src="jsLibs/Chart.min.js"></script>
+    <script src="/jsLibs/p5.min.js"></script>
+    <script src="/jsLibs/Chart.min.js"></script>
   </head>
   <body>
     <h1>Olá 😀 isso é um teste.</h1>
@@ -25,10 +25,12 @@
       Pessoas infectadas😷: <span id="I"></span> <br />
       Pessoas finalizadas💀: <span id="R"></span> <br />
     </p>
+    <canvas id="pythonPlotSim"></canvas>
     <canvas id="coronasim" width="800" height="600"></canvas>
     <style type="text/css">
       canvas { border: 1px solid black; }
     </style>
+    <script src="plotPeopleData.js"></script>
     <script src="person.js"></script>
     <script src="coronasim.js"></script>
 

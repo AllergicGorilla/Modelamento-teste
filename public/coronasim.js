@@ -1,5 +1,6 @@
-const iterations = 1000
+const iterations = 10000
 const num_people = 100
+const skp = 10; //Skip these many frames for graaph plotting performance
 const fps = 60;
 const ms_per_frame = 1000/fps;
 
@@ -34,9 +35,16 @@ function render_frame(i, full_sim, ctx, width, height) {
     else if (s == 1) infected++
     else if (s == 2) removed++
   }
-  document.getElementById('S').textContent = susceptible
-  document.getElementById('I').textContent = infected
-  document.getElementById('R').textContent = removed
+  if (i % skp == 0){
+    document.getElementById('S').textContent = susceptible
+    document.getElementById('I').textContent = infected
+    document.getElementById('R').textContent = removed
+    py_chart.data.labels.push("")
+    py_chart.data.datasets[2].data.push(susceptible)
+    py_chart.data.datasets[0].data.push(infected)
+    py_chart.data.datasets[1].data.push(removed)
+    py_chart.update();
+  }
 }
 
 async function renderSim() {
