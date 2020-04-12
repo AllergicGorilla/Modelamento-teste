@@ -1,5 +1,5 @@
-const rows = 50;
-const cols = 50;
+const rows = 100;
+const cols = 100;
 const CHEIGHT = 600;
 const CWIDTH = 600;
 let cellWidth = CWIDTH / cols;

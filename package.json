@@ -1,7 +1,7 @@
 {
   "name": "modelamento-teste",
   "version": "1.0.0",
-  "description": "testando",
+  "description": "Modelamento de uma epidemia",
   "main": "sketch.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/AllergicGorilla/Modelamento-teste/issues"
   },
-  "homepage": "https://github.com/AllergicGorilla/Modelamento-teste#readme"
+  "homepage": "https://github.com/AllergicGorilla/Modelamento-teste#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
