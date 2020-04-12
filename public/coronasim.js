@@ -1,5 +1,5 @@
-const iterations = 10000
-const num_people = 10
+const iterations = 1000
+const num_people = 100
 const fps = 60;
 const ms_per_frame = 1000/fps;
 
@@ -25,11 +25,18 @@ async function getSimData() {
 function render_frame(i, full_sim, ctx, width, height) {
   ctx.clearRect(0, 0, width, height);
   const frame = full_sim[i];
+  let [susceptible, infected, removed] = [0, 0, 0];
   for (let p of frame) {
     let [x, y, s] = p
     let person = new Person(x, y, s);
     person.display(ctx);
+    if (s == 0) susceptible++
+    else if (s == 1) infected++
+    else if (s == 2) removed++
   }
+  document.getElementById('S').textContent = susceptible
+  document.getElementById('I').textContent = infected
+  document.getElementById('R').textContent = removed
 }
 
 async function renderSim() {
@@ -44,5 +51,7 @@ async function renderSim() {
   }
   render_loop();
 }
+
+
 
 renderSim()
