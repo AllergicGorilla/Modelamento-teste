@@ -16,10 +16,19 @@
     </p>
     <canvas id="chart1"></canvas>
     <canvas id="chart2"></canvas>
-    <script src="cell.js"></script>
+    <!--<script src="cell.js"></script>
     <script src="helpers.js"></script>
     <script src="plotCellData.js"></script>
-    <script src="sketch.js"></script>
+    <script src="sketch.js"></script>-->
+    <script>
+      fetch('/coronasim')
+      .then(response => {
+        return response.json();
+      })
+      .then((response) => {
+        console.log(response);
+      });
+    </script>
 
   </body>
 </html>

@@ -112,3 +112,9 @@ class Population:
             person.move()
     def screenshot(self):
         return [person.data() for person in self.people]
+    def simulate(self, iterations):
+        result = []
+        for i in range(iterations):
+            result.append(self.screenshot())
+            self.pop_update()
+        return result
