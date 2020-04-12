@@ -45,7 +45,7 @@ class CellMatrix {
         this.newCells[i][j] = c;
       }
     }
-    this.oldCells[11][11].infected = true;
+    this.oldCells[randInt(0, this.rows)][randInt(0, this.cols)].infected = true;
   }
   stepForward() {
     //Update cells
