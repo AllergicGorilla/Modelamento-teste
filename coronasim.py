@@ -52,8 +52,8 @@ class Person:
         self.infect_radius = 5
         # probabilidade de infecção, dada a proximidade adequada
         self.p = 0.5
-        # counter de infecção, sempre 0 quando não infectado
-        self.infect_count = 0
+        # tempo de infecção, sempre 0 quando não infectado
+        self.infect_time = 0
 
     def move(self):
         if self.pos == self.path[-1]:
@@ -67,6 +67,8 @@ class Person:
             # avança a pessoa
             self.k += 1
             self.pos = self.path[self.k]
+    def data(self):
+        return (self.pos[0], self.pos[1], self.state)
 
 
 class Population:
@@ -90,8 +92,8 @@ class Population:
         """Evolui a infecção de antigos infectados.
         Isto é, checa se infected.count já ultrapassou self.infect_duration."""
         for inf in self.infected:
-            inf.infect_count += 1
-            if inf.infect_count >= self.infect_duration:
+            inf.infect_time += 1
+            if inf.infect_time >= self.infect_duration:
                 # retira os mortos/recuperados
                 inf.state += 1
 
@@ -108,3 +110,5 @@ class Population:
         self.census()
         for person in self.people:
             person.move()
+    def screenshot(self):
+        return [person.data() for person in self.people]
