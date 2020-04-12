@@ -1,5 +1,6 @@
 {
   "name": "modelamento-teste",
+  "start": "node index.js",
   "version": "1.0.0",
   "description": "Modelamento de uma epidemia",
   "main": "index.js",
