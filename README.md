@@ -8,7 +8,7 @@ Run on your terminal:
 ```bash
 $ node index.js
 ```
-Then go to http://localhost:3000 on your web browser and tada!:fireworks: it's your own web app, served on your own machine.
+Then go to http://localhost:3000 on your web browser and tada!:fireworks: it's your own web app, served on your own machine.:smiley:
 
 ## Resources used:
 * Languages: python, javascript
