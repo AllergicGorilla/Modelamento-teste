@@ -82,8 +82,14 @@ class Population:
 
     def infect(self):
         """Checa novas infecções e altera o estado dos novos infectados."""
+        self.infected.sort(key = lambda inf: inf.pos[0])
+        self.healthy.sort(key = lambda h: h.pos[0])
         for inf in self.infected:
             for hel in self.healthy:
+                if hel.pos[0] < inf.pos[0] - (hel.infect_radius + inf.infect_radius):
+                    continue
+                elif hel.pos[0] > inf.pos[0] + (hel.infect_radius + inf.infect_radius):
+                    break
                 if dist(hel.pos, inf.pos) < hel.infect_radius + inf.infect_radius:
                     if random.random() > hel.p:
                         hel.state = 1
